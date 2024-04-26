@@ -12,6 +12,7 @@ import Flight from "@/views/admin/flight_manager/FlightManager.vue";
 import Route from "@/views/admin/route_manager/RouteManager.vue";
 import Type from "@/views/admin/type_ticket_manager/TypeManager.vue";
 import Ticket from "@/views/admin/ticket_manager/TicketManager.vue";
+import BookTicket from "@/views/admin/bookticket_manager/BookTicketManaget.vue";
 const routes = [
     //Auth
     {
@@ -22,7 +23,7 @@ const routes = [
     {
         path: "/admin",
         name: "adminpage",
-        component: AriLine,
+        component: Ticket,
     },
     {
         path: "/",
@@ -168,6 +169,19 @@ const routes = [
         path: "/admin/ticket_manager/addTicket",
         name: "ticket.add",
         component: () => import("@/views/admin/ticket_manager/TicketAdd.vue"),
+    },
+
+    // BookTicket_manager
+    {
+        path: "/admin/Status",
+        name: "bookticket_manager",
+        component: BookTicket,
+    },
+    {
+        path: "/admin/Status/:id",
+        name: "selected",
+        component: () => import("@/views/admin/bookticket_manager/BookTicketSelected.vue"),
+        props: true
     },
 
     // Not Found

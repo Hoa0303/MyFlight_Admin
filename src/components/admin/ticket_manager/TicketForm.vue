@@ -15,13 +15,17 @@
         <div class="form-group">
             <label for="MaLoai">Mã loại</label>
             <select name="MaLoai" class="form-control" v-model="productLocal.MaLoai">
-                <option v-for="type in types" :key="type._id" :value="type.MaLoai">{{ type.MaLoai }}</option>
+                <option v-for="index in types" :key="index._id" :value="index.MaLoai">{{ index.MaLoai }}</option>
             </select>
             <ErrorMessage name="MaLoai" class="error-feedback" />
         </div>
         <div class="form-group">
+            <label for="Price">Giá vé</label>
+            <Field name="Price" type="int" class="form-control" v-model="productLocal.Gia" disabled />
+        </div>
+        <div class="form-group">
             <label for="MaDatVe">Mã đặt vé</label>
-            <Field name="MaDatVe" type="text" class="form-control" v-model="productLocal.MaDatVe" />
+            <Field name="MaDatVe" type="text" class="form-control" v-model="productLocal.MaDatVe" disabled />
         </div>
         <div class="form-group">
             <label for="name">Chỗ ngồi</label>
@@ -106,6 +110,7 @@ export default {
             const typeId = this.types.find(type => type.MaLoai === this.productLocal.MaLoai);
             if (typeId) {
                 this.productLocal.IdLoai = typeId._id;
+                this.productLocal.Gia = typeId.Gia;
             }
             this.$emit("submit:product", this.productLocal);
         },

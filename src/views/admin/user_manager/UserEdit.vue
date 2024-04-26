@@ -43,7 +43,7 @@ export default {
         async updateContact(data) {
             try {
                 await AuthService.update(this.contact._id, data);
-                alert('Cập nhật contact thành công!');
+                alert('Cập nhật người dùng thành công!');
             } catch (error) {
                 console.log(error);
             }

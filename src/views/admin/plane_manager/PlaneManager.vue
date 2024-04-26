@@ -1,60 +1,42 @@
 <template>
-    <div class="page row">
-        <div class="col-12">
-            <InputSearch v-model="searchText" />
-        </div>
+    <div class="container row">
         <div class="mt-3">
             <h4 class="mb-4">
                 <i class="fa-solid fa-plane"></i> Máy bay
             </h4>
-            <AriLineList v-if="filteredPlanesCount > 0" :planes="filteredPlanes"
-                v-model:activeIndex="activeIndex" />
+            <div class="row mb-3">
+                <button class="btn btn-primary col-3" @click="goToAddPlane">
+                    <i class="fas fa-plus"></i> Thêm máy bay mới
+                </button>
+                <button class="ms-3 text-center btn col-2" disabled>
+                    <span class="text-primary">Tổng: {{ filteredPlanesCount }} máy bay .</span>
+                </button>
+            </div>
+            <AriLineList v-if="filteredPlanesCount > 0" :planes="filteredPlanes" v-model:activeIndex="activeIndex" />
             <p v-else class="text-muted" style="min-width: 750px;">Không tìm thấy máy bay nào.</p>
-            <button class="btn btn-primary mt-3 mb-3" @click="goToAddPlane">
-                <i class="fas fa-plus"></i> Thêm mới
-            </button>
         </div>
     </div>
 </template>
 
 
 <script>
-import InputSearch from "@/components/admin/InputSearch.vue";
 import AriLineList from "@/components/admin/plane_manager/PlaneList.vue";
 import PlaneService from "@/services/plane.service";
 export default {
     components: {
-        InputSearch,
         AriLineList,
     },
     data() {
         return {
             Arilines: [],
-            activeIndex: -1,
-            searchText: "",
         };
-    },
-    watch: {
-        searchText() {
-            this.activeIndex = -1;
-        },
     },
     computed: {
         contactStrings() {
-            return this.Arilines.map((index) => {
-                const { MaHang } = index;
-                return [MaHang].join("");
-            });
+            return this.Arilines;
         },
         filteredPlanes() {
-            if (!this.searchText) return this.Arilines;
-            return this.Arilines.filter((_index, index) =>
-                this.contactStrings[index].includes(this.searchText)
-            );
-        },
-        activeProduct() {
-            if (this.activeIndex < 0) return null;
-            return this.filteredPlanes[this.activeIndex];
+            return this.Arilines;
         },
         filteredPlanesCount() {
             return this.filteredPlanes.length;
@@ -82,10 +64,3 @@ export default {
 
 };
 </script>
-
-<style scoped>
-.page {
-    text-align: left;
-    max-width: 750px;
-}
-</style>../../../components/admin/porduct_manager/AriLineList.vue

@@ -33,9 +33,9 @@
         <div class="form-group">
             <label>Giới tính</label>
             <div>
-                <input type="radio" id="male" name="gender" value="1" v-model="contactLocal.gender">
-                <label for="male">Nam</label>
-                <input type="radio" id="female" name="gender" value="0" v-model="contactLocal.gender">
+                <input class="me-1" type="radio" id="male" name="gender" value="1" v-model="contactLocal.gender">
+                <label class="me-2" for="male">Nam</label>
+                <input class="me-1" type="radio" id="female" name="gender" value="0" v-model="contactLocal.gender">
                 <label for="female">Nữ</label>
             </div>
             <ErrorMessage name="gender" class="error-feedback" />

@@ -32,6 +32,10 @@
             <Field name="GioDen" type="time" class="form-control" v-model="productLocal.GioDen" />
         </div>
         <div class="form-group">
+            <label for="Price">Giá tuyến</label>
+            <Field name="Price" type="int" class="form-control" v-model="productLocal.GiaTuyenBay" disabled />
+        </div>
+        <div class="form-group">
             <label for="SoHieu">Số Hiệu</label>
             <select name="SoHieu" class="form-control" v-model="productLocal.SoHieu">
                 <option v-for="plane in filteredPlanes" :key="plane._id" :value="plane.SoHieu">{{ plane.SoHieu }}
@@ -111,6 +115,7 @@ export default {
             const flightId = this.flights.find(flight => flight.MaTuyen === this.productLocal.MaTuyenBay)
             if (flightId) {
                 this.productLocal.TuyenBayId = flightId._id;
+                this.productLocal.GiaTuyenBay = flightId.GiaTuyen;
             }
             const airlineId = this.airlines.find(airline => airline.code === this.productLocal.MaHang)
             if (airlineId) {

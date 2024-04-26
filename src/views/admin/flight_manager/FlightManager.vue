@@ -1,55 +1,76 @@
 <template>
-    <div class=" row">
-        <div class="col-12">
-            <InputSearch v-model="searchText" />
-        </div>
+    <div class="container row">
         <div class="mt-3">
             <h4 class="mb-4">
                 <i class="fa-solid fa-plane-up"></i> Tuyến bay
             </h4>
+
+            <div class="row col-12">
+                <div class="form-group mb-3 col-3">
+                    <select class="form-select" id="maTuyenDropdown" v-model="selectedMaTuyen">
+                        <option value="">Tất cả Mã Tuyến</option>
+                        <option v-for="flight in uniqueMaTuyens" :value="flight">{{ flight }}</option>
+                    </select>
+                </div>
+                <div class="form-group mb-3 col-3">
+                    <select class="form-select" id="sortOrderDropdown" v-model="sortOrder">
+                        <option value="">Sắp xếp</option>
+                        <option value="increasing">Tăng dần</option>
+                        <option value="decreasing">Giảm dần</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <button class="btn btn-primary col-3" @click="goToAddFlight">
+                    <i class="fas fa-plus"></i> Thêm tuyến bay mới
+                </button>
+                <button class="ms-3 text-center btn col-2" disabled>
+                    <span class="text-primary">Tổng: {{ filteredFlightsCount }} tuyến bay.</span>
+                </button>
+            </div>
+
+            <!-- Hiển thị danh sách tuyến bay -->
             <FlightList v-if="filteredFlightsCount > 0" :flights="filteredFlights" v-model:activeIndex="activeIndex" />
             <p v-else class="text-muted" style="min-width: 750px;">Không có sản phẩm nào.</p>
-            <button class="btn btn-primary mt-3 mb-3" @click="goToAddFlight">
-                <i class="fas fa-plus"></i> Thêm mới
-            </button>
         </div>
     </div>
 </template>
 
-
 <script>
-import InputSearch from "@/components/admin/InputSearch.vue";
 import FlightList from "@/components/admin/flight_manager/FlightList.vue";
 import FlightService from "@/services/flight.service";
+
 export default {
     components: {
-        InputSearch,
         FlightList,
     },
     data() {
         return {
             Flights: [],
             activeIndex: -1,
-            searchText: "",
+            selectedMaTuyen: "",
+            sortOrder: "",
         };
     },
-    watch: {
-        searchText() {
-            this.activeIndex = -1;
-        },
-    },
     computed: {
-        contactStrings() {
-            return this.Flights.map((index) => {
-                const { MaTuyen, GiaTuyen, SanBayDen, SanBayDi } = index;
-                return [MaTuyen, GiaTuyen, SanBayDen, SanBayDi].join("");
+        uniqueMaTuyens() {
+            const maTuyens = new Set();
+            this.Flights.forEach((flight) => {
+                maTuyens.add(flight.MaTuyen);
             });
+            return Array.from(maTuyens);
         },
         filteredFlights() {
-            if (!this.searchText) return this.Flights;
-            return this.Flights.filter((_index, index) =>
-                this.contactStrings[index].includes(this.searchText)
-            );
+            let filtered = this.selectedMaTuyen ? this.Flights.filter((flight) => flight.MaTuyen === this.selectedMaTuyen) : this.Flights;
+
+            if (this.sortOrder === "increasing") {
+                filtered.sort((a, b) => a.GiaTuyen - b.GiaTuyen);
+            } else if (this.sortOrder === "decreasing") {
+                filtered.sort((a, b) => b.GiaTuyen - a.GiaTuyen);
+            }
+
+            return filtered;
         },
         activeFlight() {
             if (this.activeIndex < 0) return null;
@@ -78,6 +99,5 @@ export default {
     mounted() {
         this.refreshList();
     },
-
 };
 </script>

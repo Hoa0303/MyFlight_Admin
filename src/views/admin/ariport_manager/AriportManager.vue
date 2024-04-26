@@ -1,60 +1,42 @@
 <template>
-    <div class="row">
-        <div class="col-12">
-            <InputSearch v-model="searchText" />
-        </div>
+    <div class="container row">
         <div class="mt-3">
             <h4 class="mb-4">
                 <i class="fa-solid fa-plane-departure"></i> Sân bay
             </h4>
+            <div class="row mb-3">
+                <button class="btn btn-primary col-3" @click="goToAddAriPort">
+                    <i class="fas fa-plus"></i> Thêm sân bay mới
+                </button>
+                <button class="ms-3 text-center btn col-2" disabled>
+                    <span class="text-primary">Tổng: {{ filteredAriPortsCount }} sân bay.</span>
+                </button>
+            </div>
             <AriPortList v-if="filteredAriPortsCount > 0" :ariports="filteredAriPorts"
                 v-model:activeIndex="activeIndex" />
             <p v-else class="text-muted">Không có sân bay nào.</p>
-            <button class="btn btn-primary mt-3 mb-3" @click="goToAddAriPort">
-                <i class="fas fa-plus"></i> Thêm mới
-            </button>
         </div>
     </div>
 </template>
 
-
 <script>
-import InputSearch from "@/components/admin/InputSearch.vue";
 import AriPortList from "@/components/admin/ariport_manager/AriPortList.vue";
 import AriPortService from "@/services/ariport.service";
 export default {
     components: {
-        InputSearch,
         AriPortList,
     },
     data() {
         return {
             Ariports: [],
-            activeIndex: -1,
-            searchText: "",
         };
-    },
-    watch: {
-        searchText() {
-            this.activeIndex = -1;
-        },
     },
     computed: {
         contactStrings() {
-            return this.Ariports.map((index) => {
-                const { code, local, name } = index;
-                return [code, local, name].join("");
-            });
+            return this.Ariports;
         },
         filteredAriPorts() {
-            if (!this.searchText) return this.Ariports;
-            return this.Ariports.filter((_index, index) =>
-                this.contactStrings[index].includes(this.searchText)
-            );
-        },
-        activeProduct() {
-            if (this.activeIndex < 0) return null;
-            return this.filteredAriPorts[this.activeIndex];
+            return this.Ariports;
         },
         filteredAriPortsCount() {
             return this.filteredAriPorts.length;
